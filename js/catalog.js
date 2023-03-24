@@ -3,8 +3,13 @@
 'use strict';
 
 // Set up an empty cart for use on this page.
+if(localStorage.cart) {
+  state.cart = new Cart(JSON.parse(localStorage.cart));
+  state.cart.updateCounter();
+  updateCartPreview();
+} else {
 state.cart = new Cart([]);
-
+}
 // On screen load, we call this method to put all of the product options
 // (the things in the state.allProducts array) into the drop down list.
 function populateForm() {
@@ -46,8 +51,10 @@ function addSelectedItemToCart() {
 
 // TODO: As you add items into the cart, show them (item & quantity) in the cart preview div
 function updateCartPreview(){
+  let cart = state.cart;
   // TODO: Get the item and quantity from the form
-  let item = state.cart.items.pop();
+  for(let i = 0; i < state.cart.items.length; i++) {
+  let item = state.cart.items[i];
   console.log(item.product);
   let product = item.product;
   let quantity = item.quantity;
@@ -61,7 +68,7 @@ function updateCartPreview(){
   liElem.textContent = `${quantity} ${product}`;
   listElem.appendChild(liElem);
 }
-
+}
 // Set up the "submit" event listener on the form.
 // This is the trigger for the app. When a user "submits" the form, it will
 // Call that handleSubmit method above and kick off the whole process
